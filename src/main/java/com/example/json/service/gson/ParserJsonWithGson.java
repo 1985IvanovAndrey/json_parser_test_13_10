@@ -42,7 +42,7 @@ public class ParserJsonWithGson {
             keyValueMap = gson.fromJson(json, LinkedTreeMap.class);
             parserJsonByConventionOnlyPrimitiveType(requestDataKeyValueMap, keyValueMap);
             keyValueMap = (LinkedTreeMap) gson.fromJson(json, LinkedTreeMap.class).get("data");
-            parseJsonByConventionAndSaveKeyValueToMap(requestDataKeyValueMap, keyValueMap);
+            parserJsonByConventionAndSaveKeyValueToMap(requestDataKeyValueMap, keyValueMap);
         } catch (Exception e) {
             log.error("Error parse json, {}", e);
         }
@@ -55,14 +55,13 @@ public class ParserJsonWithGson {
         keyValueMap.forEach((key, value) -> {
             JsonElement result = new JsonParser().parse(gson.toJson(value));
             // если это простое поле
-            //System.out.println(result);
             if (result.isJsonPrimitive()) {
                 requestDataKeyValueMap.put(key.toString(), value.toString());
             }
         });
     }
 
-    private void parseJsonByConventionAndSaveKeyValueToMap(Map<String, String> requestDataKeyValueMap, LinkedTreeMap keyValueMap) {
+    private void parserJsonByConventionAndSaveKeyValueToMap(Map<String, String> requestDataKeyValueMap, LinkedTreeMap keyValueMap) {
         keyValueMap.forEach((key, value) -> {
             //System.out.println(key + "--" + value);
             JsonElement result = new JsonParser().parse(gson.toJson(value));
@@ -97,7 +96,6 @@ public class ParserJsonWithGson {
         String docVal = null;
         for (String mass : valueMass) {
             // после чего парсим по знаку "=" и ложим соответственно как ключ значение
-            //mass = setEmptyStringIfValueNotPresent(mass);
             if (setEmptyStringIfValueNotPresent(mass)) {
                 String[] inMass = mass.split("=");
                 docKey = k.toString() + "." + inMass[0].trim();
@@ -109,7 +107,7 @@ public class ParserJsonWithGson {
 
     private boolean setEmptyStringIfValueNotPresent(String mass) {
         if (mass.endsWith("=")) {
-            //mass = mass + " ";
+
             return false;
         }
         return true;
